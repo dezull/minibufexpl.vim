@@ -244,6 +244,15 @@ if !exists('g:miniBufExplMinSize')
 endif
 
 " }}}
+" Should resize window with 'equalalways' after {{{
+" starting the explorer or resizing window. Try setting this to 0
+" if it affects other plugin's window size.
+"
+if !exists('g:miniBufExplEqualAlways')
+  let g:miniBufExplEqualAlways = 1
+endif
+
+" }}}
 " TabWrap? {{{
 " By default line wrap is used (possibly breaking a tab name between two
 " lines.) Turning this option on (setting it to 1) can take more screen
@@ -434,14 +443,7 @@ function! <SID>VimEnterHandler()
 
   if g:miniBufExplAutoStart && t:miniBufExplAutoUpdate == 1
         \ && (t:skipEligibleBuffersCheck == 1 || <SID>HasEligibleBuffers() == 1)
-
-    " VimEnter event will be triggered after a session is loaded, if there is
-    " already a MBE window, we need to update it at this point.
-    if <SID>FindWindow('-MiniBufExplorer-', 1) == -1
-      call <SID>StartExplorer(bufnr("%"))
-    else
-      call <SID>UpdateExplorer(bufnr("%"))
-    endif
+    call <SID>StartExplorer(bufnr("%"))
 
     " Let the MBE open in the new tab
     let s:TabsMBEState = 1
@@ -620,9 +622,10 @@ function! <SID>StartExplorer(curBufNum)
   " Set filetype for MBE buffer
   set filetype=minibufexpl
 
-  " !!! We may want to make the following optional -- Bindu
   " New windows don't cause all windows to be resized to equal sizes
-  set noequalalways
+  if g:miniBufExplEqualAlways == 1
+    set noequalalways
+  end
 
   " !!! We may want to make the following optional -- Bindu
   " We don't want the mouse to change focus without a click
@@ -1188,11 +1191,13 @@ function! <SID>ResizeWindow()
         exec 'resize '.l:height
     endif
 
-    let saved_ead = &ead
-    let &ead = 'ver'
-    set equalalways
-    let &ead = saved_ead
-    set noequalalways
+    if g:miniBufExplEqualAlways == 1
+      let saved_ead = &ead
+      let &ead = 'ver'
+      set equalalways
+      let &ead = saved_ead
+      set noequalalways
+    end
 
   " Vertical Resize
   else
@@ -1214,11 +1219,13 @@ function! <SID>ResizeWindow()
       exec 'vertical resize '.l:newWidth
     endif
 
-    let saved_ead = &ead
-    let &ead = 'hor'
-    set equalalways
-    let &ead = saved_ead
-    set noequalalways
+    if g:miniBufExplEqualAlways == 1
+      let saved_ead = &ead
+      let &ead = 'hor'
+      set equalalways
+      let &ead = saved_ead
+      set noequalalways
+    end
 
   endif
 
