@@ -276,6 +276,17 @@ This will have no effect unless you also specify MaxSize.
 NOTE: This was *'g:miniBufExplMinHeight'* before 6.3.0; the old
 setting is backwards compatible if you don't use MinSize.
 
+                                                  *'g:miniBufExplEqualAlways'*
+------------------------------------------------------------------------------
+
+Resize window with 'equalalways' when starting the explorer or resizing the
+explorer window. To disable this behavior:
+
+  let g:miniBufExplEqualAlways = 0
+
+By default it is enabled. If other plugin's window is not resized properly,
+try disabling it.
+
 ------------------------------------------------------------------------------
 4.3 Automatic Opening                                    *MiniBufExplAutoOpen*
 
