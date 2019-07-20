@@ -1758,7 +1758,7 @@ function! <SID>BuildBufferPathSignDict(bufnrs, ...)
         endif
 
         " If some buffers' path does not have this index, we skip it
-        if len(s:bufPathDict[bufnr]) < index
+        if !has_key(s:bufPathDict, bufnr) || len(s:bufPathDict[bufnr]) < index
             continue
         endif
 
